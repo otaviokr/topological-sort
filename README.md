@@ -1,7 +1,7 @@
 # topological-sort
 A simple implementation of the topological sort algorithm.
 
-[![Coverage Status](https://coveralls.io/repos/otaviokr/topological-sort/badge.svg?branch=master&service=github)](https://coveralls.io/github/otaviokr/topological-sort?branch=master)
+[![Coverage Status](https://coveralls.io/repos/otaviokr/topological-sort/badge.svg?branch=master&service=github)](https://coveralls.io/github/otaviokr/topological-sort?branch=master) [![Build Status](https://travis-ci.org/otaviokr/topological-sort.svg)](https://travis-ci.org/otaviokr/topological-sort)
 
 ## Overview
 
