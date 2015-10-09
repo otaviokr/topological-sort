@@ -1,0 +1,10 @@
+language: go
+
+go:
+  - 1.4.2
+  - tip
+
+#go_import_path: github.com/otaviokr/topological-sort
+
+#install:
+#  - go get github.com/bmizerany/assert
