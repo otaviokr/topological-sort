@@ -1,10 +1,10 @@
 language: go
-
 go:
   - 1.4.2
   - tip
-
-#go_import_path: github.com/otaviokr/topological-sort
-
-#install:
-#  - go get github.com/bmizerany/assert
+before_install:
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+  - if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
+script:
+    - $HOME/gopath/bin/goveralls -service=travis-ci
