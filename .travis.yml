@@ -1,10 +1,17 @@
 language: go
+
 go:
   - 1.4.2
   - 1.5.1
+
 before_install:
-  - go get github.com/axw/gocov/gocov
-  - go get github.com/mattn/goveralls
-  - if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
+  - go get -v github.com/axw/gocov/gocov
+  - go get -v github.com/mattn/goveralls
+  - go get -v github.com/onsi/ginkgo/ginkgo
+  - go get -v github.com/onsi/gomega
+  - go get -v -t ./...
+  - if ! go get code.google.com/p/go.tools/cmd/cover; then go get -v golang.org/x/tools/cmd/cover; fi
+
 script:
-    - $HOME/gopath/bin/goveralls -service=travis-ci
+  - $HOME/gopath/bin/ginkgo -r --randomizeAllSpecs --randomizeSuites --failOnPending --cover --trace --race --compilers=2
+  - $HOME/gopath/bin/goveralls -service=travis-ci

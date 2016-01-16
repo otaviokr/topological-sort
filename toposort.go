@@ -1,6 +1,7 @@
 package sort
 
 import (
+	"errors"
 	"fmt"
 	"os"
 )
@@ -91,6 +92,84 @@ func KahnSort(tree map[string][]string) []string {
 		return []string{}
 	}
 
+	return sorted
+}
+
+// TarjanSort receives a description of a search tree and returns an array with the elements sorted.
+// The Tarjan's Algorithm creates an "orphan-list" of all nodes that has no parents. Then, it puts
+// the first element of that list in the sorted list and removes all edges from that node to
+// other nodes; if any of those nodes has no other parents connected, it is appended to the
+// orphan-list. The analysis starts again for the first element in the orphan-list.
+// Example for tree: map["A": ["B", "C"], "B": [], "C": ["B"]]]. Meaning A to B, A to C and C to B.
+func TarjanSort(tree map[string][]string) []string {
+	/*
+			L ← Empty list that will contain the sorted nodes
+		while there are unmarked nodes do
+		    select an unmarked node n
+		    visit(n)
+		function visit(node n)
+		    if n has a temporary mark then stop (not a DAG)
+		    if n is not marked (i.e. has not been visited yet) then
+		        mark n temporarily
+		        for each node m with an edge from n to m do
+		            visit(m)
+		        mark n permanently
+		        unmark n temporarily
+		        add n to head of L
+	*/
+	var visitFunc func(string) error
+	auxSorted := make([]string, len(tree))
+	index := len(tree)
+	temporary := map[string]bool{}
+	visited := map[string]bool{}
+
+	visitFunc = func(node string) error {
+		switch {
+		case temporary[node]:
+			// Cycle found!
+			return errors.New("Found Cycle: " + node)
+		case visited[node]:
+			// Already visited. Moving on...
+			return nil
+		}
+
+		temporary[node] = true // Mark as temporary to check for cycles...
+		for _, child := range tree[node] {
+			err := visitFunc(child) // Visit all children of a node
+			if err != nil {
+				return err
+			}
+		}
+
+		delete(temporary, node)
+		visited[node] = true
+		index--
+		auxSorted[index] = node
+		return nil
+	}
+
+	for element := range tree {
+		if visited[element] {
+			continue
+		}
+
+		err := visitFunc(element)
+		if err != nil {
+			//fmt.Println(err)
+			return []string{}
+		}
+	}
+
+	sorted := []string{}
+	for _, node := range auxSorted {
+		if len(node) > 0 {
+			sorted = append(sorted, node)
+		}
+	}
+
+	if len(sorted) != len(tree) {
+		return []string{}
+	}
 	return sorted
 }
 
