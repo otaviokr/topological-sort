@@ -237,6 +237,7 @@ var _ = Describe("Sort", func() {
 
 					sorted := TarjanSort(tree)
 					Expect(sorted).To(Or(
+						Equal([]string{"0", "1", "4", "3", "5", "6", "7", "2"}),
 						Equal([]string{"0", "4", "2", "1", "3", "5", "6", "7"}),
 						Equal([]string{"2", "0", "4", "1", "3", "5", "6", "7"}),
 						Equal([]string{"2", "0", "1", "4", "3", "5", "6", "7"}),
