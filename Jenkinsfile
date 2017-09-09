@@ -4,12 +4,11 @@ pipeline {
     stage('Preparation') {
       steps {
         echo 'Starting the Preparation step...'
-        isUnix()
-        catchError() {
-          echo 'Erro???'
-        }
-        
-        echo 'Continuing...'
+      }
+    }
+    stage('Run tests') {
+      steps {
+        sh 'go test -v'
       }
     }
   }
