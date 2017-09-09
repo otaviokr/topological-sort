@@ -9,6 +9,10 @@ pipeline {
     stage('Run tests') {
       steps {
         sh 'go test -v'
+        catchError() {
+          cleanWs(cleanWhenSuccess: true)
+        }
+        
       }
     }
   }
