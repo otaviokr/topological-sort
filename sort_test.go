@@ -1,6 +1,8 @@
 package sort_test
 
 import (
+	"fmt"
+
 	. "github.com/otaviokr/topological-sort"
 
 	. "github.com/onsi/ginkgo"
@@ -22,7 +24,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Not(BeNil()))
 					Expect(sorted).To(Not(BeEmpty()))
 					Expect(sorted).To(HaveLen(8))
@@ -36,8 +39,9 @@ var _ = Describe("Sort", func() {
 						"3": []string{"4"},
 						"4": []string{"0"}}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
 					Expect(sorted).To(BeEmpty())
+					Expect(err).To(Not(BeNil()))
 				})
 
 				It("Contains a directed cycle in the graph", func() {
@@ -51,8 +55,10 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{"5"}}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
 					Expect(sorted).To(BeEmpty())
+					Expect(err).To(Not(BeNil()))
+					Expect(err).To(Equal(fmt.Errorf("Cycle involving elements: 5, 6, 7")))
 				})
 			})
 
@@ -60,21 +66,24 @@ var _ = Describe("Sort", func() {
 				It("Using empty lists", func() {
 					tree := map[string][]string{}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{}))
 				})
 
 				It("Using just one element", func() {
 					tree := map[string][]string{"Single": []string{}}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Single"}))
 				})
 
 				It("Using two elements", func() {
 					tree := map[string][]string{"Parent": []string{}, "Child": []string{"Parent"}}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Child", "Parent"}))
 				})
 
@@ -89,7 +98,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"2", "0", "4", "1", "3", "5", "6", "7"}),
 						Equal([]string{"0", "4", "1", "3", "2", "5", "6", "7"})))
@@ -106,7 +116,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := KahnSort(tree)
+					sorted, err := KahnSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"0", "4", "1", "3", "5", "6", "7", "2"}),
 						Equal([]string{"2", "0", "4", "1", "3", "5", "6", "7"})))
@@ -125,7 +136,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := Reverse(KahnSort(tree))
+					sorted, err := ReverseKahn(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"7", "6", "5", "3", "1", "4", "0", "2"}),
 						Equal([]string{"7", "6", "5", "2", "3", "1", "4", "0"})))
@@ -148,7 +160,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Not(BeNil()))
 					Expect(sorted).To(Not(BeEmpty()))
 					Expect(sorted).To(HaveLen(8))
@@ -162,8 +175,9 @@ var _ = Describe("Sort", func() {
 						"3": []string{"4"},
 						"4": []string{"0"}}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
 					Expect(sorted).To(BeEmpty())
+					Expect(err).To(Not(BeNil()))
 				})
 
 				It("Contains a directed cycle in the graph", func() {
@@ -177,8 +191,10 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{"5"}}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
 					Expect(sorted).To(BeEmpty())
+					Expect(err).To(Not(BeNil()))
+					Expect(err).To(Equal(fmt.Errorf("Found cycle at node: 5")))
 				})
 			})
 
@@ -186,21 +202,24 @@ var _ = Describe("Sort", func() {
 				It("Using empty lists", func() {
 					tree := map[string][]string{}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{}))
 				})
 
 				It("Using just one element", func() {
 					tree := map[string][]string{"Single": []string{}}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Single"}))
 				})
 
 				It("Using two elements", func() {
 					tree := map[string][]string{"Parent": []string{}, "Child": []string{"Parent"}}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Child", "Parent"}))
 				})
 
@@ -215,7 +234,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"0", "1", "4", "3", "2", "5", "6", "7"}),
 						Equal([]string{"2", "0", "4", "1", "3", "5", "6", "7"}),
@@ -235,7 +255,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := TarjanSort(tree)
+					sorted, err := TarjanSort(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"0", "1", "4", "3", "5", "6", "7", "2"}),
 						Equal([]string{"0", "4", "2", "1", "3", "5", "6", "7"}),
@@ -257,7 +278,8 @@ var _ = Describe("Sort", func() {
 						"6": []string{"7"},
 						"7": []string{}}
 
-					sorted := Reverse(TarjanSort(tree))
+					sorted, err := ReverseTarjan(tree)
+					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"4", "7", "6", "5", "3", "1", "0", "2"}),
 						Equal([]string{"7", "6", "5", "3", "1", "2", "4", "0"}),

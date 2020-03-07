@@ -62,7 +62,10 @@ func init() {
 
 func TestKahnSort(t *testing.T) {
 	for i, testCase := range TestableTrees {
-		sorted := KahnSort(testCase.T)
+		sorted, err := KahnSort(testCase.T)
+		if err != nil {
+			t.Error(err.Error())
+		}
 		//fmt.Println("Sorted: ", sorted)
 
 		result := compareResults(sorted, testCase.R)
@@ -76,7 +79,10 @@ func TestKahnSort(t *testing.T) {
 
 func TestReverse(t *testing.T) {
 	for i, testCase := range TestableTrees {
-		reversed := Reverse(KahnSort(testCase.T))
+		reversed, err := ReverseKahn(testCase.T)
+		if err != nil {
+			t.Error(err.Error())
+		}
 		//fmt.Println("Sorted: ", reversed)
 
 		expected := [][]string{}

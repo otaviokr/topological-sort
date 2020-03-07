@@ -1,9 +1,10 @@
 package sort
 
 import (
-	"errors"
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 )
 
 // Sort is DEPRECATED. This function will be removed from the library. It used to be the
@@ -13,7 +14,8 @@ import (
 func Sort(tree map[string][]string) []string {
 	msg := "github.com/otaviokr/sort.Sort function is deprecated. Please update it to KahnSort"
 	fmt.Fprintln(os.Stderr, msg)
-	return KahnSort(tree)
+	sorted, _ := KahnSort(tree)
+	return sorted
 }
 
 // ReversedSort is DEPRECATED. It used a deprecated function (Sort), and with new algorithms
@@ -22,13 +24,7 @@ func Sort(tree map[string][]string) []string {
 func ReversedSort(tree map[string][]string) []string {
 	msg := "github.com/otaviokr/sort.ReversedSort function is deprecated. Please update it to Reverse"
 	fmt.Fprintln(os.Stderr, msg)
-	sorted := Sort(tree)
-	reversed := []string{}
-
-	for i := len(sorted); i > 0; i-- {
-		reversed = append(reversed, sorted[i-1])
-	}
-
+	reversed, _ := ReverseKahn(tree)
 	return reversed
 }
 
@@ -38,7 +34,7 @@ func ReversedSort(tree map[string][]string) []string {
 // other nodes; if any of those nodes has no other parents connected, it is appended to the
 // orphan-list. The analysis starts again for the first element in the orphan-list.
 // Example for tree: map["A": ["B", "C"], "B": [], "C": ["B"]]]. Meaning A to B, A to C and C to B.
-func KahnSort(tree map[string][]string) []string {
+func KahnSort(tree map[string][]string) ([]string, error) {
 	sorted := []string{}
 	inDegree := map[string]int{}
 
@@ -88,11 +84,23 @@ func KahnSort(tree map[string][]string) []string {
 	}
 
 	if len(tree) != len(sorted) {
+		//cycle := getCycle(sorted)
 		// It seems that there's a directed cycle. Toposort won't work.
-		return []string{}
+		cycle := []string{}
+		for element, value := range inDegree {
+			if value > 0 {
+				cycle = append(cycle, element)
+			}
+		}
+
+		sort.Slice(cycle, func(i, j int) bool {
+			return cycle[i] < cycle[j]
+		})
+
+		return []string{}, fmt.Errorf("Cycle involving elements: %s", strings.Join(cycle, ", "))
 	}
 
-	return sorted
+	return sorted, nil
 }
 
 // TarjanSort receives a description of a search tree and returns an array with the elements sorted.
@@ -101,7 +109,7 @@ func KahnSort(tree map[string][]string) []string {
 // other nodes; if any of those nodes has no other parents connected, it is appended to the
 // orphan-list. The analysis starts again for the first element in the orphan-list.
 // Example for tree: map["A": ["B", "C"], "B": [], "C": ["B"]]]. Meaning A to B, A to C and C to B.
-func TarjanSort(tree map[string][]string) []string {
+func TarjanSort(tree map[string][]string) ([]string, error) {
 	/*
 			L ← Empty list that will contain the sorted nodes
 		while there are unmarked nodes do
@@ -127,7 +135,7 @@ func TarjanSort(tree map[string][]string) []string {
 		switch {
 		case temporary[node]:
 			// Cycle found!
-			return errors.New("Found Cycle: " + node)
+			return fmt.Errorf("Found cycle at node: %s", node)
 		case visited[node]:
 			// Already visited. Moving on...
 			return nil
@@ -155,8 +163,7 @@ func TarjanSort(tree map[string][]string) []string {
 
 		err := visitFunc(element)
 		if err != nil {
-			//fmt.Println(err)
-			return []string{}
+			return []string{}, err
 		}
 	}
 
@@ -168,18 +175,60 @@ func TarjanSort(tree map[string][]string) []string {
 	}
 
 	if len(sorted) != len(tree) {
-		return []string{}
+		return []string{}, fmt.Errorf("different number of elements in the resulting tree %+v", sorted)
 	}
-	return sorted
+	return sorted, nil
+}
+
+// ReverseKahn inverts the order of the elements in the resulting sorted list.
+func ReverseKahn(tree map[string][]string) ([]string, error) {
+	return reverse(tree, "Kahn")
+}
+
+// ReverseTarjan inverts the order of the elements in the resulting sorted list.
+func ReverseTarjan(tree map[string][]string) ([]string, error) {
+	return reverse(tree, "Tarjan")
 }
 
 // Reverse is just a wrapper to invert the order of the elements in a sorted list.
-func Reverse(sorted []string) []string {
+func reverse(tree map[string][]string, algorithm string) ([]string, error) {
 	reversed := []string{}
+
+	var sorted []string
+	var err error
+	switch algorithm {
+	case "Kahn":
+		sorted, err = KahnSort(tree)
+		break
+	case "Tarjan":
+		sorted, err = TarjanSort(tree)
+		break
+	}
+
+	if err != nil {
+		return []string{}, err
+	}
 
 	for i := len(sorted); i > 0; i-- {
 		reversed = append(reversed, sorted[i-1])
 	}
 
-	return reversed
+	return reversed, nil
 }
+
+// GetCycle will check if there is a cycle in the
+// func GetCycle(sorted []string) []string {
+// 	for i, e := range(sorted) {
+// 		var cycle := []string{e}
+// 		for _, f := range(sorted[i:]) {
+// 			cycle = append(cycle, f)
+// 			if e == f {
+// 				// We found a closed cycle.
+// 				return cycle
+// 			}
+// 		}
+// 	}
+
+// 	// If we arrive here, there is no cycles!
+// 	return []string{}
+// }
