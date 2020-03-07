@@ -12,5 +12,5 @@ before_install:
   - if ! go get code.google.com/p/go.tools/cmd/cover; then go get -v golang.org/x/tools/cmd/cover; fi
 
 script:
-  - $HOME/gopath/bin/go test --ginkgo.progress --cover --race
+  - go test --ginkgo.progress --cover --race
   - $HOME/gopath/bin/goveralls -service=travis-ci
