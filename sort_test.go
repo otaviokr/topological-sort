@@ -194,7 +194,7 @@ var _ = Describe("Sort", func() {
 					sorted, err := TarjanSort(tree)
 					Expect(sorted).To(BeEmpty())
 					Expect(err).To(Not(BeNil()))
-					Expect(err).To(Equal(fmt.Errorf("Found cycle at node: 5")))
+					Expect(err.Error()).To(MatchRegexp("Found cycle at node: [5-7]"))
 				})
 			})
 
