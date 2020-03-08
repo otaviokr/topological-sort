@@ -287,6 +287,36 @@ var _ = Describe("Sort", func() {
 						Equal([]string{"7", "6", "5", "3", "4", "1", "0", "2"}),
 						Equal([]string{"7", "6", "5", "2", "3", "4", "1", "0"})))
 				})
+
+				It("Fail reverse because Kahn sort failed", func() {
+					tree := map[string][]string{
+						"0": []string{"1", "4"},
+						"1": []string{"3", "5"},
+						"2": []string{"5"},
+						"3": []string{},
+						"4": []string{},
+						"5": []string{"6"},
+						"6": []string{"7"},
+						"7": []string{"5"}}
+
+					_, err := ReverseKahn(tree)
+					Expect(err).To(Equal(fmt.Errorf("Cycle involving elements: 5, 6, 7")))
+				})
+
+				It("Fail reverse because Tarjan sort failed", func() {
+					tree := map[string][]string{
+						"0": []string{"1", "4"},
+						"1": []string{"3", "5"},
+						"2": []string{"5"},
+						"3": []string{},
+						"4": []string{},
+						"5": []string{"6"},
+						"6": []string{"7"},
+						"7": []string{"5"}}
+
+					_, err := ReverseTarjan(tree)
+					Expect(err.Error()).To(MatchRegexp("Found cycle at node: [5-7]"))
+				})
 			})
 		})
 	})

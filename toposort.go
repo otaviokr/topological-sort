@@ -174,9 +174,6 @@ func TarjanSort(tree map[string][]string) ([]string, error) {
 		}
 	}
 
-	if len(sorted) != len(tree) {
-		return []string{}, fmt.Errorf("different number of elements in the resulting tree %+v", sorted)
-	}
 	return sorted, nil
 }
 
