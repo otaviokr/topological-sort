@@ -1,9 +1,9 @@
 package sort
 
 import (
-	"testing"
 	"fmt"
 	"reflect"
+	"testing"
 )
 
 type Testable struct {
@@ -20,7 +20,7 @@ func init() {
 		Testable{
 			T: map[string][]string{
 				"Parent": []string{"Child"},
-				"Child": []string{}},
+				"Child":  []string{}},
 			R: [][]string{
 				[]string{"Parent", "Child"}}},
 
@@ -60,21 +60,29 @@ func init() {
 				[]string{"0", "4", "1", "3", "2", "5", "6", "7"}}}}
 }
 
-func TestSort(t *testing.T) {
+func TestKahnSort(t *testing.T) {
 	for i, testCase := range TestableTrees {
-		sorted := Sort(testCase.T)
+		sorted, err := KahnSort(testCase.T)
+		if err != nil {
+			t.Error(err.Error())
+		}
 		//fmt.Println("Sorted: ", sorted)
 
 		result := compareResults(sorted, testCase.R)
 		if len(result) > 0 {
-			t.Fatal(i, result)
+			errMsgTmpl := "Error on iteration %d - %s:\nExpected: %+v\nFound: %+v"
+			errMsg := fmt.Sprintf(errMsgTmpl, i, result, testCase.R, sorted)
+			t.Fatal(errMsg)
 		}
 	}
 }
 
-func TestReversedSort(t *testing.T) {
+func TestReverse(t *testing.T) {
 	for i, testCase := range TestableTrees {
-		reversed := ReversedSort(testCase.T)
+		reversed, err := ReverseKahn(testCase.T)
+		if err != nil {
+			t.Error(err.Error())
+		}
 		//fmt.Println("Sorted: ", reversed)
 
 		expected := [][]string{}
