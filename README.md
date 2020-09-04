@@ -1,8 +1,8 @@
 # topological-sort
 A simple implementation of the topological sort algorithm.
 
-[![Coverage Status][coverage-status]](coverage-link)
-[![Build Status][build-status]](build-link)
+[![Coverage Status][coverage-status]](https://coveralls.io/github/otaviokr/topological-sort?branch=master)
+[![Build Status][build-status]](https://travis-ci.org/otaviokr/topological-sort)
 
 ## Overview
 
@@ -92,8 +92,4 @@ func main() {
 
 [coverage-status]: https://coveralls.io/repos/otaviokr/topological-sort/badge.svg?branch=master&service=github
 [build-status]: https://travis-ci.org/otaviokr/topological-sort.svg
-
-[coverage-link]: https://coveralls.io/github/otaviokr/topological-sort?branch=master
-[build-link]: https://travis-ci.org/otaviokr/topological-sort
-
 [wikipedia-toposort]: https://en.wikipedia.org/wiki/Topological_sorting
