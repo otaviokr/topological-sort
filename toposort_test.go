@@ -17,47 +17,47 @@ var (
 
 func init() {
 	TestableTrees = []Testable{
-		Testable{
+		{
 			T: map[string][]string{
-				"Parent": []string{"Child"},
-				"Child":  []string{}},
+				"Parent": {"Child"},
+				"Child":  {}},
 			R: [][]string{
-				[]string{"Parent", "Child"}}},
+				{"Parent", "Child"}}},
 
 		// Empty tree.
-		Testable{
+		{
 			T: map[string][]string{},
-			R: [][]string{[]string{}}},
+			R: [][]string{{}}},
 
 		// Single node in the tree.
-		Testable{
+		{
 			T: map[string][]string{
-				"A": []string{}},
+				"A": {}},
 			R: [][]string{
-				[]string{"A"}}},
+				{"A"}}},
 
 		// Two nodes in a single tree.
-		Testable{
+		{
 			T: map[string][]string{
-				"A": []string{},
-				"B": []string{"A"}},
+				"A": {},
+				"B": {"A"}},
 			R: [][]string{
-				[]string{"B", "A"}}},
+				{"B", "A"}}},
 
 		// Complex tree with multiple nodes.
-		Testable{
+		{
 			T: map[string][]string{
-				"0": []string{"1", "4"},
-				"1": []string{"3", "5"},
-				"2": []string{"5"},
-				"3": []string{"5", "7"},
-				"4": []string{},
-				"5": []string{"6"},
-				"6": []string{"7"},
-				"7": []string{}},
+				"0": {"1", "4"},
+				"1": {"3", "5"},
+				"2": {"5"},
+				"3": {"5", "7"},
+				"4": {},
+				"5": {"6"},
+				"6": {"7"},
+				"7": {}},
 			R: [][]string{
-				[]string{"2", "0", "4", "1", "3", "5", "6", "7"},
-				[]string{"0", "4", "1", "3", "2", "5", "6", "7"}}}}
+				{"2", "0", "4", "1", "3", "5", "6", "7"},
+				{"0", "4", "1", "3", "2", "5", "6", "7"}}}}
 }
 
 func TestKahnSort(t *testing.T) {

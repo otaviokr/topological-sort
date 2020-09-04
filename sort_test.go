@@ -15,14 +15,14 @@ var _ = Describe("Sort", func() {
 			Context("Identifying direct cycles", func() {
 				It("No direct cycles in the graph", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := KahnSort(tree)
 					Expect(err).To(BeNil())
@@ -33,11 +33,11 @@ var _ = Describe("Sort", func() {
 
 				It("Graph is only a directed cycle", func() {
 					tree := map[string][]string{
-						"0": []string{"1"},
-						"1": []string{"2"},
-						"2": []string{"3"},
-						"3": []string{"4"},
-						"4": []string{"0"}}
+						"0": {"1"},
+						"1": {"2"},
+						"2": {"3"},
+						"3": {"4"},
+						"4": {"0"}}
 
 					sorted, err := KahnSort(tree)
 					Expect(sorted).To(BeEmpty())
@@ -46,14 +46,14 @@ var _ = Describe("Sort", func() {
 
 				It("Contains a directed cycle in the graph", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{"5"}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {"5"}}
 
 					sorted, err := KahnSort(tree)
 					Expect(sorted).To(BeEmpty())
@@ -72,7 +72,7 @@ var _ = Describe("Sort", func() {
 				})
 
 				It("Using just one element", func() {
-					tree := map[string][]string{"Single": []string{}}
+					tree := map[string][]string{"Single": {}}
 
 					sorted, err := KahnSort(tree)
 					Expect(err).To(BeNil())
@@ -80,7 +80,7 @@ var _ = Describe("Sort", func() {
 				})
 
 				It("Using two elements", func() {
-					tree := map[string][]string{"Parent": []string{}, "Child": []string{"Parent"}}
+					tree := map[string][]string{"Parent": {}, "Child": {"Parent"}}
 
 					sorted, err := KahnSort(tree)
 					Expect(err).To(BeNil())
@@ -89,14 +89,14 @@ var _ = Describe("Sort", func() {
 
 				It("Using multiple elements", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := KahnSort(tree)
 					Expect(err).To(BeNil())
@@ -107,14 +107,14 @@ var _ = Describe("Sort", func() {
 
 				It("Element '2' is completely disconnected", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := KahnSort(tree)
 					Expect(err).To(BeNil())
@@ -127,14 +127,14 @@ var _ = Describe("Sort", func() {
 			Context("Reverse sorting", func() {
 				It("Successful example", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := ReverseKahn(tree)
 					Expect(err).To(BeNil())
@@ -151,14 +151,14 @@ var _ = Describe("Sort", func() {
 			Context("Identifying direct cycles", func() {
 				It("No direct cycles in the graph", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := TarjanSort(tree)
 					Expect(err).To(BeNil())
@@ -169,11 +169,11 @@ var _ = Describe("Sort", func() {
 
 				It("Graph is only a directed cycle", func() {
 					tree := map[string][]string{
-						"0": []string{"1"},
-						"1": []string{"2"},
-						"2": []string{"3"},
-						"3": []string{"4"},
-						"4": []string{"0"}}
+						"0": {"1"},
+						"1": {"2"},
+						"2": {"3"},
+						"3": {"4"},
+						"4": {"0"}}
 
 					sorted, err := TarjanSort(tree)
 					Expect(sorted).To(BeEmpty())
@@ -182,14 +182,14 @@ var _ = Describe("Sort", func() {
 
 				It("Contains a directed cycle in the graph", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{"5"}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {"5"}}
 
 					sorted, err := TarjanSort(tree)
 					Expect(sorted).To(BeEmpty())
@@ -208,7 +208,7 @@ var _ = Describe("Sort", func() {
 				})
 
 				It("Using just one element", func() {
-					tree := map[string][]string{"Single": []string{}}
+					tree := map[string][]string{"Single": {}}
 
 					sorted, err := TarjanSort(tree)
 					Expect(err).To(BeNil())
@@ -216,7 +216,7 @@ var _ = Describe("Sort", func() {
 				})
 
 				It("Using two elements", func() {
-					tree := map[string][]string{"Parent": []string{}, "Child": []string{"Parent"}}
+					tree := map[string][]string{"Parent": {}, "Child": {"Parent"}}
 
 					sorted, err := TarjanSort(tree)
 					Expect(err).To(BeNil())
@@ -225,14 +225,14 @@ var _ = Describe("Sort", func() {
 
 				It("Using multiple elements", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := TarjanSort(tree)
 					Expect(err).To(BeNil())
@@ -246,14 +246,14 @@ var _ = Describe("Sort", func() {
 
 				It("Element '2' is completely disconnected", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := TarjanSort(tree)
 					Expect(err).To(BeNil())
@@ -269,14 +269,14 @@ var _ = Describe("Sort", func() {
 			Context("Reverse sorting", func() {
 				It("Successful example", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{"5", "7"},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {"5", "7"},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {}}
 
 					sorted, err := ReverseTarjan(tree)
 					Expect(err).To(BeNil())
@@ -290,14 +290,14 @@ var _ = Describe("Sort", func() {
 
 				It("Fail reverse because Kahn sort failed", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{"5"}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {"5"}}
 
 					_, err := ReverseKahn(tree)
 					Expect(err).To(Equal(fmt.Errorf("Cycle involving elements: 5, 6, 7")))
@@ -305,14 +305,14 @@ var _ = Describe("Sort", func() {
 
 				It("Fail reverse because Tarjan sort failed", func() {
 					tree := map[string][]string{
-						"0": []string{"1", "4"},
-						"1": []string{"3", "5"},
-						"2": []string{"5"},
-						"3": []string{},
-						"4": []string{},
-						"5": []string{"6"},
-						"6": []string{"7"},
-						"7": []string{"5"}}
+						"0": {"1", "4"},
+						"1": {"3", "5"},
+						"2": {"5"},
+						"3": {},
+						"4": {},
+						"5": {"6"},
+						"6": {"7"},
+						"7": {"5"}}
 
 					_, err := ReverseTarjan(tree)
 					Expect(err.Error()).To(MatchRegexp("Found cycle at node: [5-7]"))
