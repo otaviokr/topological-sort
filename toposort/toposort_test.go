@@ -1,9 +1,11 @@
-package sort
+package toposort_test
 
 import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/otaviokr/topological-sort/toposort"
 )
 
 type Testable struct {
@@ -62,7 +64,7 @@ func init() {
 
 func TestKahnSort(t *testing.T) {
 	for i, testCase := range TestableTrees {
-		sorted, err := KahnSort(testCase.T)
+		sorted, err := toposort.KahnSort(testCase.T)
 		if err != nil {
 			t.Error(err.Error())
 		}
@@ -79,7 +81,7 @@ func TestKahnSort(t *testing.T) {
 
 func TestReverse(t *testing.T) {
 	for i, testCase := range TestableTrees {
-		reversed, err := ReverseKahn(testCase.T)
+		reversed, err := toposort.ReverseKahn(testCase.T)
 		if err != nil {
 			t.Error(err.Error())
 		}

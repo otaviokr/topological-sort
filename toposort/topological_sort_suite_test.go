@@ -1,4 +1,4 @@
-package sort_test
+package toposort_test
 
 import (
 	"github.com/onsi/ginkgo"

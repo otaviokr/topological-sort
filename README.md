@@ -1,7 +1,8 @@
 # topological-sort
 A simple implementation of the topological sort algorithm.
 
-[![Coverage Status](https://coveralls.io/repos/otaviokr/topological-sort/badge.svg?branch=master&service=github)](https://coveralls.io/github/otaviokr/topological-sort?branch=master) [![Build Status](https://travis-ci.org/otaviokr/topological-sort.svg)](https://travis-ci.org/otaviokr/topological-sort)
+[![Coverage Status][coverage-status]](coverage-link)
+[![Build Status][build-status]](build-link)
 
 ## Overview
 
@@ -35,7 +36,7 @@ algorithm applied to sorting.
 ![Example of a directed acyclic graph](images/dag.png)
 
 All the following orderings are valid topological sort outcomes of the example graph above. Each one has an arbitrary,
-secondary criteria to consistently visit the nodes. Because this module does not follow any particular secondary 
+secondary criteria to consistently visit the nodes. Because this module does not follow any particular secondary
 criteria, executing it on this graph could result in any of that outcome randomly.
 
 - **7, 5, 3, 11, 8, 2, 9, 10** (visual left-to-right, top-to-bottom)
@@ -46,7 +47,7 @@ criteria, executing it on this graph could result in any of that outcome randoml
 - **3, 7, 8, 5, 11, 10, 2, 9** (arbitrary; no specific secondary criteria)
 
 This example was taken from
-[Wikipedia's article on topological sorting](https://en.wikipedia.org/wiki/Topological_sorting).
+[Wikipedia's article on topological sorting](wikipedia-toposort).
 
 ## Limitations and Design Decisions
 
@@ -88,3 +89,11 @@ func main() {
     fmt.Printf("Reversed result: %v\n", reversed)
 }
 ```
+
+[coverage-status]: https://coveralls.io/repos/otaviokr/topological-sort/badge.svg?branch=master&service=github
+[build-status]: https://travis-ci.org/otaviokr/topological-sort.svg
+
+[coverage-link]: https://coveralls.io/github/otaviokr/topological-sort?branch=master
+[build-link]: https://travis-ci.org/otaviokr/topological-sort
+
+[wikipedia-toposort]: https://en.wikipedia.org/wiki/Topological_sorting

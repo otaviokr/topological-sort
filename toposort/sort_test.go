@@ -1,13 +1,89 @@
-package sort_test
+package toposort_test
 
 import (
 	"fmt"
-
-	. "github.com/otaviokr/topological-sort"
+	"strings"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	"github.com/otaviokr/topological-sort/toposort"
 )
+
+// The tree passed as argument means
+//
+// - *A* is the head, and it is connected to *B* and *C*;
+// - *B* is not connected to anything;
+// - *C* is connected to bin.
+func ExampleKahnSort() {
+	result, err := toposort.KahnSort(map[string][]string{
+		"A": {"B", "C"},
+		"B": {},
+		"C": {"B"},
+	})
+
+	if err != nil {
+		fmt.Println("Example for KahnSort failed!")
+		return
+	}
+	fmt.Println(strings.Join(result, ","))
+	// Output: A,C,B
+}
+
+// The result is the opposite of the usual Kahn sorting algorithm. The tree passed as argument means
+//
+// - *A* is the head, and it is connected to *B* and *C*;
+// - *B* is not connected to anything;
+// - *C* is connected to bin.
+func ExampleReverseKahn() {
+	result, err := toposort.ReverseKahn(map[string][]string{
+		"A": {"B", "C"},
+		"B": {},
+		"C": {"B"},
+	})
+
+	if err != nil {
+		fmt.Println("Example for ReverseKahnt failed!")
+		return
+	}
+	fmt.Println(strings.Join(result, ","))
+	// Output: B,C,A
+}
+
+func ExampleTarjanSort() {
+	result, err := toposort.TarjanSort(map[string][]string{
+		"A": {"B", "C"},
+		"B": {},
+		"C": {"B"},
+	})
+
+	if err != nil {
+		fmt.Println("Example for TarjanSort failed!")
+		return
+	}
+	fmt.Println(strings.Join(result, ","))
+	// Output: A,C,B
+}
+
+// The result is the opposite of the usual Kahn sorting algorithm. The tree passed as argument means
+//
+// - *A* is the head, and it is connected to *B* and *C*;
+// - *B* is not connected to anything;
+// - *C* is connected to bin.
+func ExampleReverseTarjan() {
+	result, err := toposort.ReverseTarjan(map[string][]string{
+		"A": {"B", "C"},
+		"B": {},
+		"C": {"B"},
+	})
+
+	if err != nil {
+		fmt.Println("Example for ReverseKahnt failed!")
+		return
+	}
+	fmt.Println(strings.Join(result, ","))
+	// Output: B,C,A
+}
 
 var _ = Describe("Sort", func() {
 	Describe("Sorting using Kahn's", func() {
@@ -24,7 +100,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Not(BeNil()))
 					Expect(sorted).To(Not(BeEmpty()))
@@ -39,7 +115,7 @@ var _ = Describe("Sort", func() {
 						"3": {"4"},
 						"4": {"0"}}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(sorted).To(BeEmpty())
 					Expect(err).To(Not(BeNil()))
 				})
@@ -55,7 +131,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {"5"}}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(sorted).To(BeEmpty())
 					Expect(err).To(Not(BeNil()))
 					Expect(err).To(Equal(fmt.Errorf("Cycle involving elements: 5, 6, 7")))
@@ -66,7 +142,7 @@ var _ = Describe("Sort", func() {
 				It("Using empty lists", func() {
 					tree := map[string][]string{}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{}))
 				})
@@ -74,7 +150,7 @@ var _ = Describe("Sort", func() {
 				It("Using just one element", func() {
 					tree := map[string][]string{"Single": {}}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Single"}))
 				})
@@ -82,7 +158,7 @@ var _ = Describe("Sort", func() {
 				It("Using two elements", func() {
 					tree := map[string][]string{"Parent": {}, "Child": {"Parent"}}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Child", "Parent"}))
 				})
@@ -98,7 +174,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"2", "0", "4", "1", "3", "5", "6", "7"}),
@@ -116,7 +192,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := KahnSort(tree)
+					sorted, err := toposort.KahnSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"0", "4", "1", "3", "5", "6", "7", "2"}),
@@ -136,7 +212,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := ReverseKahn(tree)
+					sorted, err := toposort.ReverseKahn(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"7", "6", "5", "3", "1", "4", "0", "2"}),
@@ -160,7 +236,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Not(BeNil()))
 					Expect(sorted).To(Not(BeEmpty()))
@@ -175,7 +251,7 @@ var _ = Describe("Sort", func() {
 						"3": {"4"},
 						"4": {"0"}}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(sorted).To(BeEmpty())
 					Expect(err).To(Not(BeNil()))
 				})
@@ -191,7 +267,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {"5"}}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(sorted).To(BeEmpty())
 					Expect(err).To(Not(BeNil()))
 					Expect(err.Error()).To(MatchRegexp("Found cycle at node: [5-7]"))
@@ -202,7 +278,7 @@ var _ = Describe("Sort", func() {
 				It("Using empty lists", func() {
 					tree := map[string][]string{}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{}))
 				})
@@ -210,7 +286,7 @@ var _ = Describe("Sort", func() {
 				It("Using just one element", func() {
 					tree := map[string][]string{"Single": {}}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Single"}))
 				})
@@ -218,7 +294,7 @@ var _ = Describe("Sort", func() {
 				It("Using two elements", func() {
 					tree := map[string][]string{"Parent": {}, "Child": {"Parent"}}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Equal([]string{"Child", "Parent"}))
 				})
@@ -234,7 +310,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"0", "1", "4", "3", "2", "5", "6", "7"}),
@@ -255,7 +331,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := TarjanSort(tree)
+					sorted, err := toposort.TarjanSort(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"0", "1", "4", "3", "5", "6", "7", "2"}),
@@ -278,7 +354,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {}}
 
-					sorted, err := ReverseTarjan(tree)
+					sorted, err := toposort.ReverseTarjan(tree)
 					Expect(err).To(BeNil())
 					Expect(sorted).To(Or(
 						Equal([]string{"4", "7", "6", "5", "3", "1", "0", "2"}),
@@ -299,7 +375,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {"5"}}
 
-					_, err := ReverseKahn(tree)
+					_, err := toposort.ReverseKahn(tree)
 					Expect(err).To(Equal(fmt.Errorf("Cycle involving elements: 5, 6, 7")))
 				})
 
@@ -314,7 +390,7 @@ var _ = Describe("Sort", func() {
 						"6": {"7"},
 						"7": {"5"}}
 
-					_, err := ReverseTarjan(tree)
+					_, err := toposort.ReverseTarjan(tree)
 					Expect(err.Error()).To(MatchRegexp("Found cycle at node: [5-7]"))
 				})
 			})
