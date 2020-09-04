@@ -90,6 +90,6 @@ func main() {
 }
 ```
 
-[coverage-status]: https://coveralls.io/repos/otaviokr/topological-sort/badge.svg?branch=master&service=github
+[coverage-status]: https://coveralls.io/repos/github/otaviokr/topological-sort/badge.svg?branch=master
 [build-status]: https://travis-ci.org/otaviokr/topological-sort.svg
 [wikipedia-toposort]: https://en.wikipedia.org/wiki/Topological_sorting
