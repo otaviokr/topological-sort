@@ -1,39 +1,23 @@
-package sort
+// Package toposort is a Lib to perform topological sorting
+//
+// Topological sorting is a linear ordering of a directed graph, such that for every directed edge 'uv' from vertex 'u' to vertex 'v'
+// 'u' comes before 'v' in the ordering. For more info, see https://en.wikipedia.org/wiki/Topological_sorting
+//
+// This lib offers 4 different algorithms of topological sorting: Kahn, Tarjan (aka depth-first()), Reverse Kahn and Reverse Tarjan.
+package toposort
 
 import (
 	"fmt"
-	"os"
 	"sort"
 	"strings"
 )
 
-// Sort is DEPRECATED. This function will be removed from the library. It used to be the
-// KahnSort function, but the name is too generic, so it will be removed. Feel free
-// to use any sort function in this library, but if you wish the same behaviour,
-// use KahnSort.
-func Sort(tree map[string][]string) []string {
-	msg := "github.com/otaviokr/sort.Sort function is deprecated. Please update it to KahnSort"
-	fmt.Fprintln(os.Stderr, msg)
-	sorted, _ := KahnSort(tree)
-	return sorted
-}
-
-// ReversedSort is DEPRECATED. It used a deprecated function (Sort), and with new algorithms
-// this function makes no sense. I suggest to use the new Reverse() function with the sorting
-// function of your choice.
-func ReversedSort(tree map[string][]string) []string {
-	msg := "github.com/otaviokr/sort.ReversedSort function is deprecated. Please update it to Reverse"
-	fmt.Fprintln(os.Stderr, msg)
-	reversed, _ := ReverseKahn(tree)
-	return reversed
-}
-
 // KahnSort receives a description of a search tree and returns an array with the elements sorted.
+//
 // The Kahn's Algorithm creates an "orphan-list" of all nodes that has no parents. Then, it puts
 // the first element of that list in the sorted list and removes all edges from that node to
 // other nodes; if any of those nodes has no other parents connected, it is appended to the
 // orphan-list. The analysis starts again for the first element in the orphan-list.
-// Example for tree: map["A": ["B", "C"], "B": [], "C": ["B"]]]. Meaning A to B, A to C and C to B.
 func KahnSort(tree map[string][]string) ([]string, error) {
 	sorted := []string{}
 	inDegree := map[string]int{}
@@ -104,11 +88,11 @@ func KahnSort(tree map[string][]string) ([]string, error) {
 }
 
 // TarjanSort receives a description of a search tree and returns an array with the elements sorted.
+//
 // The Tarjan's Algorithm creates an "orphan-list" of all nodes that has no parents. Then, it puts
 // the first element of that list in the sorted list and removes all edges from that node to
 // other nodes; if any of those nodes has no other parents connected, it is appended to the
 // orphan-list. The analysis starts again for the first element in the orphan-list.
-// Example for tree: map["A": ["B", "C"], "B": [], "C": ["B"]]]. Meaning A to B, A to C and C to B.
 func TarjanSort(tree map[string][]string) ([]string, error) {
 	/*
 			L ← Empty list that will contain the sorted nodes

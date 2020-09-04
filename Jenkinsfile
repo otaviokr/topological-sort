@@ -8,11 +8,10 @@ pipeline {
     }
     stage('Run tests') {
       steps {
-        sh 'go test -v'
+        sh 'go test -v ./toposort'
         catchError() {
           cleanWs(cleanWhenSuccess: true)
         }
-        
       }
     }
   }
