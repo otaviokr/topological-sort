@@ -64,29 +64,49 @@ The example below is a complete example (just run it!) with both functions being
 package main
 
 import (
-    "fmt"
-    "gitlab.com/otaviokr/topological-sort"
+  "fmt"
+  "github.com/otaviokr/topological-sort/toposort"
 )
 
 func main() {
+
+  // Leaf nodes (those that have no children), can be omitted in the map.
+  // In the example below, you can remove entries with keys "4" and "7",
+  // and still get the same result.
   unsorted := map[string][]string{
-    "0": []string{"1", "4"},
+    "0": {"1", "4"},
     "1": []string{"3", "5"},
     "2": []string{"5"},
-		"3": []string{"5", "7"},
-		"4": []string{},
-		"5": []string{"6"},
-		"6": []string{"7"},
-		"7": []string{}}
+    "3": []string{"5", "7"},
+    "4": {},
+    "5": []string{"6"},
+    "6": []string{"7"},
+    "7": {},
+  }
 
-	sorted := KahnSort(unsorted)
-	fmt.Printf("Result by Kahn's: %v\n", sorted)
+  sorted, err := toposort.KahnSort(unsorted)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("Result by Kahn's: %v\n", sorted)
 
-  sorted = TarjanSort(unsorted)
+  sorted, err = toposort.TarjanSort(unsorted)
+  if err != nil {
+    panic(err)
+  }
   fmt.Printf("Result by Tarjan's: %v\n", sorted)
 
-	reversed := Reverse(KahnSort(unsorted))
-    fmt.Printf("Reversed result: %v\n", reversed)
+  reversedKahn, err := toposort.ReverseKahn(unsorted)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("Reversed Kahn result: %v\n", reversedKahn)
+
+  reversedTarjan, err := toposort.ReverseTarjan(unsorted)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("Reversed Tarjan result: %v\n", reversedTarjan)
 }
 ```
 

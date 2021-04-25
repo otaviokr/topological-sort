@@ -22,9 +22,12 @@ func KahnSort(tree map[string][]string) ([]string, error) {
 	sorted := []string{}
 	inDegree := map[string]int{}
 
+	// Make sure all nodes are referred in the map.
+	normalizedTree := normalizeTree(tree)
+
 	// 01. Calculate this.indegree of all vertices by going through every edge of the graph;
 	// Each child gets indegree++ during breadth-first run.
-	for element, children := range tree {
+	for element, children := range normalizedTree {
 		if _, exists := inDegree[element]; !exists {
 			inDegree[element] = 0 // So far, element does not have any parent.
 		}
@@ -55,7 +58,7 @@ func KahnSort(tree map[string][]string) ([]string, error) {
 		stack = stack[:len(stack)-1]
 
 		// 03.02. Find all children of element and decrease indegree. If indegree becomes 0, add to zero-degree-stack;
-		for _, child := range tree[node] {
+		for _, child := range normalizedTree[node] {
 			inDegree[child]--
 			if inDegree[child] == 0 {
 				stack = append(stack, child)
@@ -67,7 +70,7 @@ func KahnSort(tree map[string][]string) ([]string, error) {
 		sorted = append(sorted, node)
 	}
 
-	if len(tree) != len(sorted) {
+	if len(normalizedTree) != len(sorted) {
 		//cycle := getCycle(sorted)
 		// It seems that there's a directed cycle. Toposort won't work.
 		cycle := []string{}
@@ -94,6 +97,10 @@ func KahnSort(tree map[string][]string) ([]string, error) {
 // other nodes; if any of those nodes has no other parents connected, it is appended to the
 // orphan-list. The analysis starts again for the first element in the orphan-list.
 func TarjanSort(tree map[string][]string) ([]string, error) {
+
+	// Make sure all nodes are referred in the map.
+	normalizedTree := normalizeTree(tree)
+
 	/*
 			L ← Empty list that will contain the sorted nodes
 		while there are unmarked nodes do
@@ -110,8 +117,8 @@ func TarjanSort(tree map[string][]string) ([]string, error) {
 		        add n to head of L
 	*/
 	var visitFunc func(string) error
-	auxSorted := make([]string, len(tree))
-	index := len(tree)
+	auxSorted := make([]string, len(normalizedTree))
+	index := len(normalizedTree)
 	temporary := map[string]bool{}
 	visited := map[string]bool{}
 
@@ -126,7 +133,7 @@ func TarjanSort(tree map[string][]string) ([]string, error) {
 		}
 
 		temporary[node] = true // Mark as temporary to check for cycles...
-		for _, child := range tree[node] {
+		for _, child := range normalizedTree[node] {
 			err := visitFunc(child) // Visit all children of a node
 			if err != nil {
 				return err
@@ -140,7 +147,7 @@ func TarjanSort(tree map[string][]string) ([]string, error) {
 		return nil
 	}
 
-	for element := range tree {
+	for element := range normalizedTree {
 		if visited[element] {
 			continue
 		}
@@ -195,6 +202,26 @@ func reverse(tree map[string][]string, algorithm string) ([]string, error) {
 	}
 
 	return reversed, nil
+}
+
+// NormalizeTree will check if all nodes referred in the slices are present in the map as key too.
+// If not, it will create the entry to make sure all nodes are accounted for.
+func normalizeTree(source map[string][]string) map[string][]string {
+	normalized := map[string][]string {}
+
+	for key, values := range source {
+		// Copy the valid entry from the source map to the normalized map.
+		normalized[key] = values
+		for _, node := range values {
+			if _, found := source[node]; !found {
+				// Current node is in the slice, but not as a key in map.
+				// This means we need to treat it as a leaf-node.
+				normalized[node] = []string{}
+			}
+		}
+	}
+
+	return normalized
 }
 
 // GetCycle will check if there is a cycle in the
